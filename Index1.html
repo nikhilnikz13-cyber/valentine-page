@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A little note for Yamuna 💌</title>
+<style>
+:root{
+--bg1:#2c0f45;
+--bg2:#5c1b7a;
+--card:#ffffff;
+--text:#fdf8ff;
+--muted:#ead9f7;
+--accent:#ff4fa3;
+--accent-dark:#d93c87;
+--soft:#f7d9ee;
+--shadow:0 18px 45px rgba(0,0,0,.25);
+}
+
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color: transparent;
+}
+
+body{
+margin:0;
+font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+background:
+radial-gradient(circle at top, rgba(255,255,255,.08), transparent 30%),
+linear-gradient(180deg, var(--bg2), var(--bg1));
+color:var(--text);
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.sparkles{
+position:fixed;
+inset:0;
+pointer-events:none;
+overflow:hidden;
+z-index:0;
+}
+
+.sparkle{
+position:absolute;
+width:6px;
+height:6px;
+border-radius:50%;
+background:rgba(255,255,255,.8);
+box-shadow:0 0 12px rgba(255,255,255,.9);
+animation: twinkle linear infinite;
+opacity:.7;
+}
+
+@keyframes twinkle{
+0%{ transform:translateY(0) scale(.7); opacity:.2; }
+50%{ opacity:1; transform:translateY(-12px) scale(1); }
+100%{ transform:translateY(-24px) scale(.6); opacity:.1; }
+}
+
+.app{
+position:relative;
+z-index:1;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:18px;
+}
+
+.screen{
+width:min(100%, 420px);
+display:none;
+text-align:center;
+animation: fadeUp .45s ease;
+}
+
+.screen.active{
+display:block;
+}
+
+@keyframes fadeUp{
+from{ opacity:0; transform:translateY(18px) scale(.98);}
+to{ opacity:1; transform:translateY(0) scale(1);}
+}
+
+.pill{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:8px 14px;
+border-radius:999px;
+background:rgba(255,255,255,.12);
+color:#fff;
+font-size:14px;
+backdrop-filter: blur(6px);
+margin-bottom:18px;
+border:1px solid rgba(255,255,255,.15);
+}
+
+.title{
+font-size:28px;
+line-height:1.2;
+margin:0 0 10px;
+font-weight:800;
+letter-spacing:.2px;
+}
+
+.subtitle{
+color:var(--muted);
+font-size:15px;
+line-height:1.6;
+margin:0 auto 24px;
+max-width:320px;
+}
+
+.card{
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.12);
+border-radius:28px;
+padding:24px 20px;
+box-shadow:var(--shadow);
+backdrop-filter: blur(10px);
+}
+
+.progress-wrap{
+margin-top:22px;
+}
+
+.progress-bar{
+width:100%;
+height:12px;
+border-radius:999px;
+background:rgba(255,255,255,.15);
+overflow:hidden;
+position:relative;
+}
+
+.progress-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg, #ff66b7, #ff3f93);
+border-radius:999px;
+transition:width .18s linear;
+box-shadow:0 0 18px rgba(255,79,163,.55);
+}
+
+.progress-text{
+margin-top:12px;
+font-size:15px;
+color:#fff;
+font-weight:600;
+}
+
+.heart{
+font-size:28px;
+animation:pulse 1.2s infinite;
+display:inline-block;
+margin-bottom:12px;
+}
+
+@keyframes pulse{
+0%,100%{ transform:scale(1); }
+50%{ transform:scale(1.12); }
+}
+
+.question-box{
+margin-top:14px;
+}
+
+.question{
+font-size:24px;
+font-weight:700;
+margin:8px 0 14px;
+line-height:1.35;
+}
+
+.options{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:18px;
+}
+
+.btn{
+border:none;
+outline:none;
+cursor:pointer;
+padding:14px 16px;
+border-radius:16px;
+font-size:15px;
+font-weight:700;
+transition:.22s ease;
+width:100%;
+}
+
+.btn-primary{
+background:linear-gradient(180deg, var(--accent), var(--accent-dark));
+color:white;
+box-shadow:0 10px 24px rgba(255,79,163,.35);
+}
+
+.btn-primary:hover{
+transform:translateY(-1px);
+filter:brightness(1.03);
+}
+
+.btn-soft{
+background:rgba(255,255,255,.12);
+color:white;
+border:1px solid rgba(255,255,255,.14);
+}
+
+.btn-soft:hover{
+background:rgba(255,255,255,.16);
+transform:translateY(-1px);
+}
+
+.mini-note{
+margin-top:16px;
+font-size:13px;
+color:var(--muted);
+line-height:1.5;
+}
+
+.envelope-wrap{
+display:flex;
+justify-content:center;
+margin:18px 0 16px;
+perspective:1000px;
+}
+
+.envelope{
+position:relative;
+width:240px;
+height:165px;
+cursor:pointer;
+transition:transform .35s ease;
+}
+
+.envelope:hover{
+transform:translateY(-4px) scale(1.01);
+}
+
+.env-body{
+position:absolute;
+inset:0;
+background:linear-gradient(180deg, #ffeaf4, #ffd3e7);
+border-radius:16px;
+box-shadow:var(--shadow);
+overflow:hidden;
+border:2px solid rgba(255,255,255,.5);
+}
+
+.env-body:before,
+.env-body:after{
+content:"";
+position:absolute;
+width:180px;
+height:180px;
+background:#ffc3de;
+transform:rotate(45deg);
+top:75px;
+border-radius:14px;
+}
+
+.env-body:before{
+left:-78px;
+}
+
+.env-body:after{
+right:-78px;
+}
+
+.env-bottom{
+position:absolute;
+left:50%;
+bottom:-70px;
+transform:translateX(-50%) rotate(45deg);
+width:160px;
+height:160px;
+background:#ffb7d7;
+border-radius:20px;
+}
+
+.env-flap{
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:95px;
+background:#ff8fc3;
+clip-path:polygon(0 0, 100% 0, 50% 100%);
+transform-origin:top;
+transition:transform .7s ease;
+z-index:3;
+}
+
+.envelope.open .env-flap{
+transform:rotateX(180deg);
+}
+
+.seal{
+position:absolute;
+left:50%;
+top:62%;
+transform:translate(-50%, -50%);
+width:54px;
+height:54px;
+border-radius:50%;
+background:linear-gradient(180deg, #ff5ca8, #ff2d8a);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-size:22px;
+z-index:4;
+box-shadow:0 10px 24px rgba(255,60,140,.35);
+}
+
+.letter-peek{
+position:absolute;
+left:50%;
+top:30px;
+transform:translateX(-50%);
+width:180px;
+height:110px;
+background:#fff;
+border-radius:14px;
+z-index:1;
+transition:transform .7s ease, top .7s ease;
+box-shadow:0 8px 20px rgba(0,0,0,.12);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#d54a8f;
+font-weight:700;
+font-size:14px;
+}
+
+.envelope.open .letter-peek{
+top:-25px;
+transform:translateX(-50%) translateY(-20px);
+}
+
+.tap-text{
+font-size:15px;
+color:var(--muted);
+margin-top:10px;
+}
+
+.final-card{
+background:#fffafc;
+color:#5d2950;
+border-radius:28px;
+padding:28px 22px;
+box-shadow:var(--shadow);
+position:relative;
+overflow:hidden;
+text-align:left;
+}
+
+.final-card::before{
+content:"";
+position:absolute;
+width:180px;
+height:180px;
+background:radial-gradient(circle, rgba(255,145,196,.22), transparent 70%);
+top:-60px;
+right:-50px;
+border-radius:50%;
+}
+
+.note-top{
+text-align:center;
+margin-bottom:18px;
+}
+
+.note-badge{
+display:inline-flex;
+align-items:center;
+gap:8px;
+background:#ffe5f1;
+color:#d23f86;
+border-radius:999px;
+padding:8px 14px;
+font-size:13px;
+font-weight:700;
+margin-bottom:14px;
+}
+
+.note-title{
+margin:0;
+text-align:center;
+font-size:28px;
+color:#5a214a;
+}
+
+.note-to{
+text-align:center;
+color:#8b5a79;
+font-size:15px;
+margin:8px 0 22px;
+}
+
+.letter{
+font-size:16px;
+line-height:1.9;
+color:#5e3651;
+position:relative;
+z-index:1;
+}
+
+.sign{
+margin-top:22px;
+font-weight:800;
+color:#c93f84;
+font-size:18px;
+}
+
+.small{
+display:block;
+font-size:13px;
+color:#8c6680;
+margin-top:4px;
+font-weight:500;
+}
+
+.actions{
+display:flex;
+gap:12px;
+margin-top:22px;
+flex-wrap:wrap;
+}
+
+.actions .btn{
+flex:1;
+min-width:130px;
+}
+
+.footer-note{
+margin-top:16px;
+font-size:12px;
+color:#c9b0c5;
+text-align:center;
+}
+
+.hidden{
+display:none !important;
+}
+
+.emoji-float{
+position:fixed;
+font-size:22px;
+pointer-events:none;
+animation: floatUp 2.8s linear forwards;
+z-index:99;
+opacity:.95;
+}
+
+@keyframes floatUp{
+0%{
+transform:translateY(0) scale(.9);
+opacity:0;
+}
+15%{ opacity:1; }
+100%{
+transform:translateY(-160px) scale(1.25) rotate(12deg);
+opacity:0;
+}
+}
+
+@media (max-width:420px){
+.title{ font-size:24px; }
+.question{ font-size:22px; }
+.final-card{ padding:24px 18px; }
+.letter{ font-size:15px; line-height:1.85; }
+}
+</style>
+</head>
+<body>
+<div class="sparkles" id="sparkles"></div>
+
+<div class="app">
+<!-- Screen 1: Loading -->
+<section class="screen active" id="screen-loading">
+<div class="card">
+<div class="heart">💖</div>
+<div class="pill">Messageing your cutie... 💌</div>
+<h1 class="title">Cheat code unlocked ❤️</h1>
+<p class="subtitle">
+Preparing something soft, honest and made just for Yamuna...
+</p>
+
+<div class="progress-wrap">
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+<div class="progress-text" id="progressText">0%</div>
+</div>
+</div>
+</section>
+
+<!-- Screen 2 -->
+<section class="screen" id="screen-q1">
+<div class="card">
+<div class="pill">💕 Tap each one, please?</div>
+<div class="heart">🥺</div>
+<div class="question-box">
+<div class="question">Yamuna... are you still a little mad at me? 💭</div>
+<div class="options">
+<button class="btn btn-primary next-btn">Maybe a little 😒</button>
+<button class="btn btn-soft next-btn">Okay yes... but continue 😌</button>
+</div>
+<div class="mini-note">I know I messed up, but please hear me out till the end 🤍</div>
+</div>
+</div>
+</section>
+
+<!-- Screen 3 -->
+<section class="screen" id="screen-q2">
+<div class="card">
+<div class="pill">💘 One more thing...</div>
+<div class="heart">🌷</div>
+<div class="question-box">
+<div class="question">Can I have one chance to make it up to you? 🫶</div>
+<div class="options">
+<button class="btn btn-primary next-btn">Okay... one chance ❤️</button>
+<button class="btn btn-soft next-btn">Let me see what you say first 👀</button>
+</div>
+<div class="mini-note">Because losing your smile over my mistake hurts me too.</div>
+</div>
+</div>
+</section>
+
+<!-- Screen 4 -->
+<section class="screen" id="screen-q3">
+<div class="card">
+<div class="pill">💞 Last question promise</div>
+<div class="heart">💗</div>
+<div class="question-box">
+<div class="question">Will you open one tiny note from Nikhil? 💌</div>
+<div class="options">
+<button class="btn btn-primary next-btn">Open the note 💖</button>
+<button class="btn btn-soft next-btn">Fine... I’ll read it 😌</button>
+</div>
+<div class="mini-note">It’s small, but every word is from the heart.</div>
+</div>
+</div>
+</section>
+
+<!-- Screen 5: Envelope -->
+<section class="screen" id="screen-envelope">
+<div class="card">
+<div class="pill">A little note for you ✨</div>
+<h2 class="title" style="font-size:26px;">Tap the envelope to reveal it 💌</h2>
+<p class="subtitle">
+I made this only for you, Yamuna.
+</p>
+
+<div class="envelope-wrap">
+<div class="envelope" id="envelope">
+<div class="letter-peek">for Yamuna 🤍</div>
+<div class="env-body">
+<div class="env-bottom"></div>
+</div>
+<div class="env-flap"></div>
+<div class="seal">💖</div>
+</div>
+</div>
+
+<div class="tap-text">Tap once to open ✨</div>
+</div>
+</section>
+
+<!-- Screen 6: Final Note -->
+<section class="screen" id="screen-final">
+<div class="final-card">
+<div class="note-top">
+<div class="note-badge">💌 A little apology note</div>
+<h2 class="note-title">To Yamuna</h2>
+<div class="note-to">from Nikhil ❤️</div>
+</div>
+
+<div class="letter">
+I know I’ve hurt you, and I know a simple “sorry” can never fully cover
+the way I made you feel. But still, I want to say it with my whole heart —
+<b>I’m truly sorry, Yamuna.</b><br><br>
+
+If I could take back the moment that upset you, I would do it in a heartbeat.
+Not because I’m afraid of losing the conversation, but because I hate being the reason
+for your pain, your silence, or even a small change in your smile.<br><br>
+
+You matter to me more than my ego, more than being “right,” and more than the mistakes
+I made in that moment. I know I may not always say things perfectly, but one thing I need
+you to know is this: <b>my feelings for you are real, and so is my regret.</b><br><br>
+
+I miss talking to you normally. I miss your warmth, your softness, your little expressions,
+and the comfort of knowing you’re okay with me. I’m not asking you to forget everything instantly —
+I’m only asking for one chance to make it better, slowly, honestly, and properly.<br><br>
+
+If your heart still has even a tiny corner willing to forgive me, I promise I’ll value it.
+I’ll do better, speak better, and love you in a way that feels safer and gentler for your heart.<br><br>
+
+No matter what, thank you for reading this till the end.
+And if you do forgive me... I promise I’ll treasure that with all of me. 🤍
+</div>
+
+<div class="sign">
+Yours,
+<span class="small">Nikhil 💖</span>
+</div>
+
+<div class="actions">
+<button class="btn btn-primary" id="forgiveBtn">I forgive you 🤍</button>
+<button class="btn btn-soft" id="replayBtn">Read again 💌</button>
+</div>
+</div>
+
+<div class="footer-note">Made with love, hope, and one very sorry heart ✨</div>
+</section>
+</div>
+
+<script>
+const screens = [
+"screen-loading",
+"screen-q1",
+"screen-q2",
+"screen-q3",
+"screen-envelope",
+"screen-final"
+ ];
+
+let currentScreen = 0;
+
+function showScreen(index){
+document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+const target = document.getElementById(screens[index]);
+if(target) target.classList.add("active");
+currentScreen = index;
+}
+
+// Sparkles background
+const sparkles = document.getElementById("sparkles");
+for(let i=0;i<26;i++){
+const s = document.createElement("div");
+s.className = "sparkle";
+s.style.left = Math.random() * 100 + "vw";
+s.style.top = Math.random() * 100 + "vh";
+s.style.animationDuration = (2 + Math.random()*4) + "s";
+s.style.animationDelay = (Math.random()*3) + "s";
+s.style.opacity = (0.3 + Math.random()*0.7).toFixed(2);
+sparkles.appendChild(s);
+}
+
+// Loading progress
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+let progress = 0;
+
+const loader = setInterval(() => {
+progress += Math.floor(Math.random() * 8) + 3;
+if(progress > 100) progress = 100;
+
+progressFill.style.width = progress + "%";
+progressText.textContent = progress + "%";
+
+if(progress >= 100){
+clearInterval(loader);
+setTimeout(() => showScreen(1), 700);
+}
+}, 180);
+
+// Question screens buttons
+document.querySelectorAll(".next-btn").forEach(btn => {
+btn.addEventListener("click", () => {
+popEmoji(["💖","🥺","✨","💌","💕"][Math.floor(Math.random()*5)]);
+if(currentScreen < 4){
+showScreen(currentScreen + 1);
+}
+});
+});
+
+// Envelope open
+const envelope = document.getElementById("envelope");
+let opened = false;
+
+envelope.addEventListener("click", () => {
+if(opened) return;
+opened = true;
+envelope.classList.add("open");
+burstHearts();
+
+setTimeout(() => {
+showScreen(5);
+}, 1200);
+});
+
+// Final buttons
+document.getElementById("forgiveBtn").addEventListener("click", () => {
+burstHearts(18);
+alert("Yay 💖 Nikhil is smiling again because Yamuna forgave him 🥹");
+});
+
+document.getElementById("replayBtn").addEventListener("click", () => {
+opened = false;
+envelope.classList.remove("open");
+showScreen(1);
+});
+
+function popEmoji(char){
+const el = document.createElement("div");
+el.className = "emoji-float";
+el.textContent = char;
+el.style.left = (window.innerWidth * (0.2 + Math.random()*0.6)) + "px";
+el.style.top = (window.innerHeight * (0.55 + Math.random()*0.2)) + "px";
+document.body.appendChild(el);
+setTimeout(() => el.remove(), 2800);
+}
+
+function burstHearts(count = 10){
+const emojis = ["💖","💕","💗","💞","✨"];
+for(let i=0;i<count;i++){
+setTimeout(() => {
+popEmoji(emojis[Math.floor(Math.random()*emojis.length)]);
+}, i * 80);
+}
+}
+</script>
+</body>
+</html>
